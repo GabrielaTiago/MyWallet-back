@@ -1,15 +1,13 @@
-import express, { json } from "express";
+import express, { json, Router } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { signInUser, signUpUser } from "./controllers/authController.js";
+import router from "./routes/authRoutes.js";
 dotenv.config();
 
 const server = express();
 server.use(json(), cors());
+server.use(router);
 
-
-server.post("/sign-in", signInUser);
-server.post("/sign-up", signUpUser);
 
 server.listen(process.env.PORT, () => {
     console.log(`The server is running on port ${process.env.PORT}`);
