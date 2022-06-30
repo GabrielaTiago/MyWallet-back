@@ -1,18 +1,12 @@
-import express, { json } from "express";
 import { MongoClient } from "mongodb";
 import joi from "joi";
-import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-
-const server = express();
-server.use(json());
-server.use(cors());
 
 const mongoClient = new MongoClient(process.env.MONGO_URI);
 let db;
 
-mongoClient.connect().then(() => {
+mongoClient.connect(() => {
     db = mongoClient.db(process.env.MONGO_DATABASE_NAME);
 });
 
@@ -23,7 +17,7 @@ const singInSchema = joi.object({
 });
 
 
-server.post("/sign-in", async (require, response) => {
+export async function signInUser (require, response) {
     const userSingIn = require.body;
 
     const validation = singInSchema.validate(userSingIn, { abortEarly: true });
@@ -40,8 +34,4 @@ server.post("/sign-in", async (require, response) => {
         console.error(error);
         response.status(500).send("Erro na requisição");
     }
-});
-
-server.listen(process.env.PORT, () => {
-    console.log(`O servidor está funcionando na porta ${process.env.PORT}`);
-});
+};
