@@ -36,7 +36,7 @@ async function signInUser(require, response) {
     try {
         await db
             .collection("users")
-            .insertOne({ email, password });
+            .insertOne({ email, password: user.password });
 
     } catch (error) {
         console.error(error);
