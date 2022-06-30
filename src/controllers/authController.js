@@ -8,6 +8,12 @@ const singInSchema = joi.object({
     password: joi.string().required().min(4)
 });
 
+const signUpSchema = joi.object({
+    name: joi.string().required().min(1),
+    email: joi.string().email().required(),
+    password: joi.string().required().min(4),
+    confirmPassword: joi.ref('password')
+});
 
 
 async function signInUser(require, response) {
@@ -24,7 +30,7 @@ async function signInUser(require, response) {
         response.status(200).send("Login successfully");
     }
     else {
-        response.status(400).send("Incorrect email or password")
+        response.status(400).send("Incorrect email or password");
     }
 
     try {
@@ -40,17 +46,25 @@ async function signInUser(require, response) {
 
 async function signUpUser(require, response) {
     const signUp = require.body;
+    const validation = signUpSchema.validate(signUp, { abortEarly: true });
+
+    if (validation.error){
+        response.status(422).send(validation.error.details);
+        return;
+    }
 
     try {
+        const passwordHash = bcrypt.hashSync(signUp.password, 10);
+
         await db
             .collection("users")
-            .insertOne({signUp});
-            
-            response.status(201).send("Registered user");
+            .insertOne({ ...signUp, password: passwordHash });
+
+        response.status(201).send("Registered user");
 
     } catch (error) {
         console.error(error);
-        response.status(500).send("Bad request")
+        response.status(500).send("Bad request");
     }
 }
 
