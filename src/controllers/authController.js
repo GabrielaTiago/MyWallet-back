@@ -1,14 +1,6 @@
-import { MongoClient } from "mongodb";
 import joi from "joi";
-import dotenv from "dotenv";
-dotenv.config();
-
-const mongoClient = new MongoClient(process.env.MONGO_URI);
-let db;
-
-mongoClient.connect(() => {
-    db = mongoClient.db(process.env.MONGO_DATABASE_NAME);
-});
+import bcrypt from 'bcrypt';
+import { db } from "../dbStrategy/mongodb.js";
 
 
 const singInSchema = joi.object({
@@ -17,21 +9,31 @@ const singInSchema = joi.object({
 });
 
 
-export async function signInUser (require, response) {
-    const userSingIn = require.body;
+async function signInUser(require, response) {
+    const { email, password } = require.body;
+    const validation = singInSchema.validate(require.body, { abortEarly: true });
+    const user = await db.collection("users").findOne({ email });
 
-    const validation = singInSchema.validate(userSingIn, { abortEarly: true });
-
-    if(validation.error){
+    if (validation.error) {
         response.status(422).send(validation.error.details);
+        return;
+    }
+
+    if (user && bcrypt.compareSync(password, user.password)) {
+        response.status(200).send("Login successfully");
+    }
+    else {
+        response.status(400).send("Incorrect email or password")
     }
 
     try {
         await db
             .collection("users")
-            .insertOne({userSingIn});
+            .insertOne({ email, password });
     } catch (error) {
         console.error(error);
-        response.status(500).send("Erro na requisição");
+        response.status(500).send("Bad request");
     }
 };
+
+export { signInUser };

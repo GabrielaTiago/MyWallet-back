@@ -8,7 +8,6 @@ const server = express();
 server.use(json(), cors());
 
 
-
 server.post("/sign-in", signInUser);
 
 server.listen(process.env.PORT, () => {
