@@ -9,6 +9,7 @@ const singInSchema = joi.object({
 });
 
 
+
 async function signInUser(require, response) {
     const { email, password } = require.body;
     const validation = singInSchema.validate(require.body, { abortEarly: true });
@@ -30,10 +31,27 @@ async function signInUser(require, response) {
         await db
             .collection("users")
             .insertOne({ email, password });
+
     } catch (error) {
         console.error(error);
         response.status(500).send("Bad request");
     }
 };
 
-export { signInUser };
+async function signUpUser(require, response) {
+    const signUp = require.body;
+
+    try {
+        await db
+            .collection("users")
+            .insertOne({signUp});
+            
+            response.status(201).send("Registered user");
+
+    } catch (error) {
+        console.error(error);
+        response.status(500).send("Bad request")
+    }
+}
+
+export { signInUser, signUpUser };
