@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import { singInSchema, signUpSchema} from "../schema/schemas.js"
+import { v4 as uuid } from 'uuid';
+import { singInSchema, signUpSchema } from "../schema/schemas.js"
 import { db } from "../dbStrategy/mongodb.js";
 
 
@@ -9,21 +10,26 @@ async function signInUser(require, response) {
     const user = await db.collection("users").findOne({ email });
 
     if (validation.error) {
-        response.status(422).send(validation.error.details);
-        return;
-    }
-
-    if (user && bcrypt.compareSync(password, user.password)) {
-        response.status(200).send("Login successfully");
-    }
-    else {
-        response.status(400).send("Incorrect email or password");
+        return response.status(422).send(validation.error.details);
     }
 
     try {
-        await db
-            .collection("users")
-            .insertOne({ email, password: user.password });
+        if (user && bcrypt.compareSync(password, user.password)) {
+            const token = uuid();
+            
+            await db
+                .collection("personal-wallet")
+                .insertOne({
+                    userId: user._id,
+                    token
+                });
+
+            return response.status(201).send("Login successfully")
+        }
+        else {
+            return response.status(401).send("Incorrect email or password");
+        }
+
 
     } catch (error) {
         console.error(error);
@@ -34,10 +40,14 @@ async function signInUser(require, response) {
 async function signUpUser(require, response) {
     const signUp = require.body;
     const validation = signUpSchema.validate(signUp, { abortEarly: true });
+    const user = await db.collection("users").findOne({ email: signUp.email });
 
-    if (validation.error){
-        response.status(422).send(validation.error.details);
-        return;
+    if (validation.error) {
+        return response.status(422).send(validation.error.details);
+    }
+
+    if (user) {
+        return response.status(422).send("User already exits");
     }
 
     try {
