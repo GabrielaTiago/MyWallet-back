@@ -6,6 +6,7 @@ dotenv.config();
 
 const server = express();
 server.use(json(), cors());
+
 server.use(router);
 
 
