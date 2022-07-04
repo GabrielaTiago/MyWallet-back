@@ -18,7 +18,7 @@ async function signInUser(require, response) {
                     token
                 });
 
-            return response.status(201).send("Login successfully");
+            return response.status(201).send({token, name: user.name});
         }
         else {
             return response.status(401).send("Incorrect email or password");
