@@ -5,7 +5,7 @@ import transactionsMiddleware from "../middlewares/transactionsMiddleware.js";
 
 const walletRoutes = Router();
 
-walletRoutes.get("/personal-wallet", validateToken, getWallet);
+walletRoutes.get("/transactions", validateToken, getWallet);
 walletRoutes.post("/transactions", validateToken, transactionsMiddleware, postTransaction);
 
 

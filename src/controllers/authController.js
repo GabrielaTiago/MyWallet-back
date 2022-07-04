@@ -39,6 +39,7 @@ async function signUpUser(require, response) {
 
     try {
         const passwordHash = bcrypt.hashSync(signUp.password, 10);
+        delete signUp.confirmPassword;
 
         await db
             .collection("users")
