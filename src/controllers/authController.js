@@ -4,8 +4,8 @@ import { db } from "../dbStrategy/mongodb.js";
 
 
 async function signInUser(require, response) {
-    const {email, password} = require.body
-    const user = await db.collection("users").findOne({ email});
+    const { email, password } = require.body
+    const user = await db.collection("users").findOne({ email });
 
     try {
         if (user && bcrypt.compareSync(password, user.password)) {
@@ -18,7 +18,7 @@ async function signInUser(require, response) {
                     token
                 });
 
-            return response.status(201).send("Login successfully")
+            return response.status(201).send("Login successfully");
         }
         else {
             return response.status(401).send("Incorrect email or password");
