@@ -1,6 +1,6 @@
 import { db } from "../dbStrategy/mongodb";
 
-function validateToken(require, response, next) {
+async function validateToken(require, response, next) {
     const { authorization } = require.headers;
     const token = authorization?.replace("Bearer ", "");
     const userOnline = await db.collection("").finOne({ "token": token });
