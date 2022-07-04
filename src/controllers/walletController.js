@@ -13,4 +13,7 @@ async function getWallet(require, response) {
     }
 }
 
-export { getWallet };
+async function postTransaction(require, response) {
+
+}
+export { getWallet, postTransaction };

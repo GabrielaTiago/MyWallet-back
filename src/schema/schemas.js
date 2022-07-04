@@ -11,3 +11,8 @@ export const signUpSchema = joi.object({
     password: joi.string().required().min(4),
     confirmPassword: joi.ref('password')
 });
+
+export const transactionsSchema = joi.object({
+    amout: joi.string().required().min(1),
+    description : joi.string().required().min(2)
+});
