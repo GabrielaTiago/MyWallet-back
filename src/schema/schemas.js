@@ -14,5 +14,6 @@ export const signUpSchema = joi.object({
 
 export const transactionsSchema = joi.object({
     amout: joi.string().required().min(1),
-    description : joi.string().required().min(2)
+    description : joi.string().required().min(2),
+    status: joi.string()
 });
