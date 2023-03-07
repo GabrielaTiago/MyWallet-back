@@ -1,17 +1,17 @@
 import bcrypt from "bcrypt";
 import { v4 as uuid } from 'uuid';
-import { db } from "../dbStrategy/mongodb.js";
+import { database } from "../database/mongodb.js";
 
 
 async function signInUser(require, response) {
     const { email, password } = require.body
-    const user = await db.collection("users").findOne({ email });
+    const user = await database.collection("users").findOne({ email });
 
     try {
         if (user && bcrypt.compareSync(password, user.password)) {
             const token = uuid();
 
-            await db
+            await database
                 .collection("personalWallet")
                 .insertOne({
                     userId: user._id,
@@ -31,7 +31,7 @@ async function signInUser(require, response) {
 
 async function signUpUser(require, response) {
     const signUp = require.body;
-    const user = await db.collection("users").findOne({ email: signUp.email });
+    const user = await database.collection("users").findOne({ email: signUp.email });
 
     if (user) {
         return response.status(422).send("User already exits");
@@ -41,7 +41,7 @@ async function signUpUser(require, response) {
         const passwordHash = bcrypt.hashSync(signUp.password, 10);
         delete signUp.confirmPassword;
 
-        await db
+        await database
             .collection("users")
             .insertOne({ ...signUp, password: passwordHash });
 

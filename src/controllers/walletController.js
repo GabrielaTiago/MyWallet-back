@@ -1,12 +1,12 @@
-import { db } from "../dbStrategy/mongodb.js";
+import { database } from "../database/mongodb.js";
 import { ObjectId } from "mongodb";
 import dayjs from "dayjs";
 
 async function getWallet(require, response) {
-    const userId = response.locals.userOnline._id;
+    const userId = response.locals.user._id;
 
     try {
-        const wallet = await db.collection("personalWallet").find({ userId }).toArray();
+        const wallet = await database.collection("personalWallet").find({ userId }).toArray();
         response.send(wallet);
 
     } catch (error) {
@@ -17,16 +17,16 @@ async function getWallet(require, response) {
 
 async function postTransaction(require, response) {
     const userId = response.locals.userOnline._id;
-    const {amout, description, status} = require.body;
+    const {amout, description, type} = require.body;
     const day = dayjs().format("DD-MM");
     
     try {
         if (userId) {
-            const transaction = await db.collection("transactions").insertOne({
+            const transaction = await database.collection("transactions").insertOne({
                 day: day,
                 amout,
                 description,
-                status,
+                type,
                 id: userId
             });
             response.sendStatus(201);
