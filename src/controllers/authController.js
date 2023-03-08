@@ -1,56 +1,19 @@
-import bcrypt from "bcrypt";
-import { v4 as uuid } from 'uuid';
-import { db } from "../dbStrategy/mongodb.js";
+import authServices from "../services/authService.js";
 
+async function signInUser(req, res) {
+  const data = req.body;
 
-async function signInUser(require, response) {
-    const { email, password } = require.body
-    const user = await db.collection("users").findOne({ email });
+  const userData = await authServices.signInUser(data);
 
-    try {
-        if (user && bcrypt.compareSync(password, user.password)) {
-            const token = uuid();
+  return res.status(200).send(userData);
+}
 
-            await db
-                .collection("personalWallet")
-                .insertOne({
-                    userId: user._id,
-                    token
-                });
+async function signUpUser(req, res) {
+  const data = req.body;
 
-            return response.status(201).send({token, name: user.name});
-        }
-        else {
-            return response.status(401).send("Incorrect email or password");
-        }
-    } catch (error) {
-        console.error(error);
-        response.status(500).send("Bad request");
-    }
-};
+  await authServices.signUpUser(data);
 
-async function signUpUser(require, response) {
-    const signUp = require.body;
-    const user = await db.collection("users").findOne({ email: signUp.email });
-
-    if (user) {
-        return response.status(422).send("User already exits");
-    }
-
-    try {
-        const passwordHash = bcrypt.hashSync(signUp.password, 10);
-        delete signUp.confirmPassword;
-
-        await db
-            .collection("users")
-            .insertOne({ ...signUp, password: passwordHash });
-
-        response.status(201).send("Registered user");
-
-    } catch (error) {
-        console.error(error);
-        response.status(500).send("Bad request");
-    }
+  res.status(201).send("Usuário registrado com sucesso!");
 }
 
 export { signInUser, signUpUser };
