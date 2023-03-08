@@ -1,9 +1,9 @@
 import joi from "joi";
 
-const amoutRegex = /^\d+(,\d{2}|\.\d{2})?$/;
+const amoutRegex = /^\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})$/; 
 
 const transactionsSchema = joi.object({
-  amout: joi.string().trim().pattern(amoutRegex).required().messages({
+  amount: joi.string().trim().pattern(amoutRegex).required().messages({
     "string.empty": `O valor da quantia não é permitido ser vazio`,
     "any.required": `O campo quantia é obrigatório`,
     "string.pattern.base": `Apenas números são aceitos`,
