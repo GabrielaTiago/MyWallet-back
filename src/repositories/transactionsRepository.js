@@ -51,9 +51,17 @@ async function deleteTransaction(transactionId) {
   });
 }
 
+async function findTransactionById(transactionId) {
+  const transaction = await database
+    .collection("transactions")
+    .findOne({ _id: ObjectId(transactionId) });
+  return transaction;
+}
+
 const transactionsRepository = {
   createTransaction,
   deleteTransaction,
+  findTransactionById,
   getAllTransactions,
   getBalance,
   updateTransaction,
