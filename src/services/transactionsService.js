@@ -1,14 +1,19 @@
+import authRepository from "../repositories/authRepository.js";
 import transactionsRepository from "../repositories/transactionsRepository.js";
 import formatDay from "../utils/formatDay.js";
 
 async function getAllTransactions(userId) {
-  const transactions = await transactionsRepository.getAllTransactions();
+  await checksUserExistence(userId);
+
+  const transactions = await transactionsRepository.getAllTransactions(userId);
   const balance = await transactionsRepository.getBalance(userId);
 
   return { balance, transactions };
 }
 
 async function createTransaction(userId, amount, description, type) {
+  await checksUserExistence(userId);
+
   const day = formatDay();
   let formatedAmout = convertAmountToNumber(amount);
 
@@ -25,21 +30,16 @@ async function createTransaction(userId, amount, description, type) {
   );
 }
 
-async function updateTransaction(userId, id, amount, description, type) {
-  const transaction = await transactionsRepository.findTransactionById(id);
+async function updateTransaction(
+  userId,
+  transactionId,
+  amount,
+  description,
+  type
+) {
+  await checksUserExistence(userId);
 
-  if (!transaction) {
-    const error = { type: "not_found", message: "Transação não encontrada" };
-    throw error;
-  }
-
-  if (transaction.userId !== userId) {
-    const error = {
-      type: "unauthorized",
-      message: "Usuário não permitido",
-    };
-    throw error;
-  }
+  await transactionValidations(userId, transactionId);
 
   let formatedAmout = convertAmountToNumber(amount);
 
@@ -48,15 +48,34 @@ async function updateTransaction(userId, id, amount, description, type) {
   }
 
   await transactionsRepository.updateTransaction(
-    id,
+    transactionId,
     formatedAmout,
     description,
     type
   );
 }
 
-async function deleteTransaction(userId, id) {
-  const transaction = await transactionsRepository.findTransactionById(id);
+async function deleteTransaction(userId, transactionId) {
+  await checksUserExistence(userId);
+
+  await transactionValidations(userId, transactionId);
+
+  await transactionsRepository.deleteTransaction(transactionId);
+}
+
+async function checksUserExistence(userId) {
+  const validUser = await authRepository.findUserById(userId);
+
+  if (!validUser) {
+    const error = { type: "not_found", message: "Usuário não encontrado" };
+    throw error;
+  }
+}
+
+async function transactionValidations(userId, transactionId) {
+  const transaction = await transactionsRepository.findTransactionById(
+    transactionId
+  );
 
   if (!transaction) {
     const error = { type: "not_found", message: "Transação não encontrada" };
@@ -70,8 +89,6 @@ async function deleteTransaction(userId, id) {
     };
     throw error;
   }
-  
-  await transactionsRepository.deleteTransaction(id);
 }
 
 function getsNumberOfPeriodsAndCommas(amount) {

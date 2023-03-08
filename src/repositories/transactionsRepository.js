@@ -1,18 +1,21 @@
 import { ObjectId } from "mongodb";
 import { database } from "../database/mongodb.js";
 
-async function getAllTransactions() {
+async function getAllTransactions(userId) {
   const transactions = await database
     .collection("transactions")
-    .find()
+    .find({ userId })
     .toArray();
   return transactions;
 }
 
-async function getBalance() {
+async function getBalance(userId) {
   const total = await database
     .collection("transactions")
     .aggregate([
+      {
+        $match: { userId },
+      },
       {
         $group: {
           _id: null,

@@ -1,6 +1,6 @@
 import joi from "joi";
 
-const amoutRegex = /^\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})$/; 
+const amoutRegex = /^\d{1,3}(?:[.,]?\d{3})*(?:[.,]\d{2})?$/; 
 
 const transactionsSchema = joi.object({
   amount: joi.string().trim().pattern(amoutRegex).required().messages({
