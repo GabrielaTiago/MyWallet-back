@@ -55,6 +55,25 @@ async function updateTransaction(userId, id, amount, description, type) {
   );
 }
 
+async function deleteTransaction(userId, id) {
+  const transaction = await transactionsRepository.findTransactionById(id);
+
+  if (!transaction) {
+    const error = { type: "not_found", message: "Transação não encontrada" };
+    throw error;
+  }
+
+  if (transaction.userId !== userId) {
+    const error = {
+      type: "unauthorized",
+      message: "Usuário não permitido",
+    };
+    throw error;
+  }
+  
+  await transactionsRepository.deleteTransaction(id);
+}
+
 function getsNumberOfPeriodsAndCommas(amount) {
   let numberOfPeriods = 0;
   let numberOfCommas = 0;
@@ -116,6 +135,7 @@ function convertAmountToNumber(amount) {
 
 const transactionsService = {
   createTransaction,
+  deleteTransaction,
   getAllTransactions,
   updateTransaction,
 };
