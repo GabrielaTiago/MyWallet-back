@@ -36,8 +36,18 @@ async function updateTransaction(req, res) {
   res.status(200).send("Updated!");
 }
 
+async function deleteTransaction(req, res) {
+  const { id: userId } = res.locals.user;
+  const { id } = req.params;
+
+  await transactionsService.deleteTransaction(userId, id);
+
+  res.status(200).send("Deleted!");
+}
+
 const transactionsController = {
   createTransaction,
+  deleteTransaction,
   getAllTransactions,
   updateTransaction,
 };
