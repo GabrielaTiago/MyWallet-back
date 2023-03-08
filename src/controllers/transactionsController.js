@@ -1,7 +1,9 @@
 import transactionsService from "../services/transactionsService.js";
 
 async function getAllTransactions(req, res) {
-  const transactions = await transactionsService.getAllTransactions();
+  const { id: userId } = res.locals.user;
+
+  const transactions = await transactionsService.getAllTransactions(userId);
 
   res.status(200).send(transactions);
 }
