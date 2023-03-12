@@ -24,7 +24,7 @@ async function signInUser({ email, password }) {
 
   if (user && validPassword) {
     const token = generatesToken(user._id, email);
-    return { message: "Autenticado com sucesso!", token };
+    return { message: "Autenticado com sucesso!", token, name: user.name };
   } else {
     const error = {
       type: "unauthorized",
