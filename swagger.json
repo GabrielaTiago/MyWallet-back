@@ -1,0 +1,427 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "tittle": "API MyWallet",
+        "description": "API desenvolvida em NodeJS, Express e MongoDB, sistema que oferece funcionalidades para gerenciamento de finanças pessoais com segurança e eficiência. Possuindo fluxo de login completo e rotas autenticadas.",
+        "contact": {
+            "email": "gabrielatiagodearaujo@outlook.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "API de testes"
+        },
+        {
+            "url": "https://mywallet.up.railway.app",
+            "description": "API de produção"
+        }
+    ],
+    "paths": {
+        "/sign-in": {
+            "post": {
+                "summary": "Login de um usuário",
+                "description": "Esta rota é responsável por logar o usuário na aplicação",
+                "tags": [
+                    "Autenticação"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "email": "newUser@domain.com",
+                                        "password": "Password@123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário autenticado com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Authenticated"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado. Credenciais de email e/ou senhas erradas"
+                    },
+                    "422": {
+                        "description": "Campos email e senha vazios e/ou campos faltante"
+                    }
+                }
+            }
+        },
+        "/sign-up": {
+            "post": {
+                "summary": "Registro de um novo usuário",
+                "description": "Esta rota é responsável por registrar um novo usuário",
+                "tags": [
+                    "Autenticação"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewUser"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "name": "Novo Usuário",
+                                        "email": "newUser@domain.com",
+                                        "password": "Password@123",
+                                        "confirmPassword": "Password@123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário registrado com sucesso"
+                    },
+                    "409": {
+                        "description": "Esse email já foi cadastrado"
+                    },
+                    "422": {
+                        "description": "Erro de esquemas: campos nome, email, senha, confirmação de senha vazios e/ou campos faltantes. Senhas não são iguais"
+                    },
+                    "5XX": {
+                        "description": "Erro inesperado"
+                    }
+                }
+            }
+        },
+        "/transactions": {
+            "get": {
+                "summary": "Busca todas as transações do usuário",
+                "description": "Esta rota é responsável por transações todas as transações do usuário na aplicação, juntamente com o balanço monetário",
+                "tags": [
+                    "Transações"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Balanço e todas as transações do usuário",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/AllTransactions"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Não autorizado: Cabeçalho de autorização ausente | Token não encontrado | Token Inválido"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "5XX": {
+                        "description": "Erro inesperado"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Registra uma nova transação",
+                "description": "Esta rota é responsável por registrar uma nova transação do usuário",
+                "tags": [
+                    "Transações"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Transaction"
+                            },
+                            "examples": {
+                                "transação de ganho": {
+                                    "value": {
+                                        "amount": "3000,00",
+                                        "description": "Salário dev",
+                                        "type": "income"
+                                    }
+                                },
+                                "transação de gasto": {
+                                    "value": {
+                                        "amount": "156,78",
+                                        "description": "Conta de energia",
+                                        "type": "expense"
+                                    }
+                                },
+                                "transação com campos inválidos": {
+                                    "value": {
+                                        "value": "345.78",
+                                        "details": "Combustível",
+                                        "types": "income"
+                                    }
+                                },
+                                "transação com quantia inválida": {
+                                    "value": {
+                                        "amount": "R$ 150,0056",
+                                        "description": "Conta de internet",
+                                        "type": "expense"
+                                    }
+                                },
+                                "transação com tipo inválido": {
+                                    "value": {
+                                        "amount": "234.56",
+                                        "description": "Bỗnus",
+                                        "type": "bonus"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transação criada com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autorizado: Cabeçalho de autorização ausente | Token não encontrado | Token Inválido"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado"
+                    },
+                    "422": {
+                        "description": "Erro de esquemas: campos quantia, descrição, tipo estão vazios e/ou campos faltantes | Quantia apenas números, sepração decimal com vírgula ou ponto"
+                    },
+                    "5XX": {
+                        "description": "Erro inesperado"
+                    }
+                }
+            }
+        },
+        "/transactions/{id}": {
+            "put": {
+                "summary": "Edita uma transação",
+                "description": "Esta rota é responsável por uma transação do usuário",
+                "tags": [
+                    "Transações"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id da transação",
+                        "required": true
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Transaction"
+                            },
+                            "examples": {
+                                "edição da transação de ganho": {
+                                    "value": {
+                                        "amount": "3300,00",
+                                        "description": "Novo salário",
+                                        "type": "income"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Transação editada com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autorizado: Cabeçalho de autorização ausente | Token não encontrado | Token Inválido | Usuário não permitido"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado | Transação não encontrada"
+                    },
+                    "422": {
+                        "description": "Erro de esquemas: campos quantia, descrição, tipo estão vazios e/ou campos faltantes | Quantia apenas números, sepração decimal com vírgula ou ponto"
+                    },
+                    "5XX": {
+                        "description": "Erro inesperado"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Deleta uma transação",
+                "description": "Esta rota é responsável por uma transação do usuário",
+                "tags": [
+                    "Transações"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id da transação",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transação deletada com sucesso"
+                    },
+                    "401": {
+                        "description": "Não autorizado: Cabeçalho de autorização ausente | Token não encontrado | Token Inválido | Usuário não permitido"
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado | Transação não encontrada"
+                    },
+                    "5XX": {
+                        "description": "Erro inesperado"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "NewUser": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Precisa ser enviado um nome"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email válido"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Pelo menos 8 caracteres. Deve incluir letras maiúsculas e minúsculas, um número e um caracter especial."
+                    },
+                    "confirmPassword": {
+                        "type": "string",
+                        "description": "Igual à senha"
+                    }
+                }
+            },
+            "Transaction": {
+                "type": "object",
+                "properties": {
+                    "amount": {
+                        "type": "string",
+                        "description": "Apenas números são aceitos. Formato monetário brasileiro 1.234,56 ou internacional 1,234.56"
+                    },
+                    "decription": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Apenas tipos 'income' e 'expense' são aceitos"
+                    }
+                }
+            },
+            "DBTransaction": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "ObjectId",
+                        "description": "Tipos BSON do MongoDB"
+                    },
+                    "userId": {
+                        "type": "ObjectId",
+                        "description": "Referencia ao usuário dono da transação"
+                    },
+                    "day": {
+                        "type": "string"
+                    },
+                    "amount": {
+                        "type": "number"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AllTransactions": {
+                "type": "object",
+                "properties": {
+                    "balance": {
+                        "type": "number",
+                        "description": "Soma total de todas as transações registradas do usuário"
+                    },
+                    "transactions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DBTransaction"
+                        },
+                        "description": "Todas as transações do usuário"
+                    }
+                }
+            },
+            "Authenticated": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Token de autenticação do usuário"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormart": "JWT"
+            }
+        }
+    }
+}
