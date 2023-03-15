@@ -5,7 +5,7 @@
 ## <p align = "center">API de gerenciamento financeiro pessoal</p>
 
 <div align = "center">
-   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" height="30px"/>
+   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" heigth="30px"/>
    <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" heigth="30px"/>
    <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" heigth="30px"/>
    <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" heigth="30px">
@@ -36,14 +36,14 @@ A aplicação oferece rotas autenticadas para visualizar todas as transações r
 - Fluxo de cadastro e login de usuários
 - Criptrografia de senhas
 - Autenticação com JWT
-- Validações de schemas
+- Validações de campos
 - CRUD completo para transações
 
 ---
 
 ### :rocket: Rodando esse projeto localmente
 
-Para inicializar esse projeto é necessário que você possua a última versão estável do [Node.js](https://nodejs.org/en/download) e [npm](https://www.npmjs.com/) rodando localmente. Você também precisará instalar o [MongoDB](https://www.mongodb.com/docs/manual/installation/) para acessar o banco de dados, deixando aberto durante a execução.
+Para inicializar esse projeto é necessário que você possua a última versão estável do [Node.js](https://nodejs.org/en/download) e [npm](https://www.npmjs.com/) rodando localmente. Você também precisará instalar o [MongoDB](https://www.mongodb.com/docs/manual/installation/) para acessar o banco de dados.
 
 Primeiro de tudo, clone este projeto ou faça o download do ZIP.
 
@@ -65,9 +65,9 @@ Execute o seguinte comando para instalar as dependências.
     npm install
 ```
 
-Para ininicilizar o banco de dados, execute:
+Para inicializar o banco de dados, execute:
 
-```bash
+```shell
    mongod --dbpath ~/.mongo
 ```
 
