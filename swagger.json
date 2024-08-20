@@ -14,7 +14,7 @@
             "description": "API de testes"
         },
         {
-            "url": "https://mywallet.up.railway.app",
+            "url": "https://mywallet-api-backend.herokuapp.com",
             "description": "API de produção"
         }
     ],
