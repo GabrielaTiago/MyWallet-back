@@ -2,7 +2,7 @@
 
 # <p align = "center">MyWallet</p>
 
-## <p align = "center">API de gerenciamento financeiro pessoal</p>
+### <p align = "center">API de gerenciamento financeiro pessoal</p>
 
 <div align = "center">
    <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" height="30px"/>
@@ -15,9 +15,7 @@
    <img src="https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E" heigth="30px"/>
 </div>
 
-$~$
-
-### :clipboard: Descrição
+## :clipboard: Descrição
 
 O projeto consiste em uma API desenvolvida em NodeJS, Express e MongoDB, que oferece funcionalidades para gerenciamento de finanças pessoais com segurança e eficiência.
 
@@ -25,23 +23,19 @@ Esta é a parte backend do projeto, incluindo um fluxo de login seguro com cript
 
 A aplicação oferece rotas autenticadas para visualizar todas as transações registradas, permitindo que os usuários possam ter uma visão geral de suas finanças, assim como o saldo atual. Além disso, é possível registrar uma nova transação de gasto ou ganho, incluindo informações como data, valor e categoria.
 
-#### 💸 [API](https://mywallet.up.railway.app)
+💸 [**API**](https://mywallet-api-backend.herokuapp.com)
 
-#### 💰 [Aplicação fullstack](https://mywallet-gabrielatiago.vercel.app/)
+💰 [**Aplicação fullstack**](https://mywallet-gabrielatiago.vercel.app/)
 
----
+## :bookmark_tabs: Características do projeto
 
-### :bookmark_tabs: Características do projeto
+-   Fluxo de cadastro e login de usuários
+-   Criptrografia de senhas
+-   Autenticação com JWT
+-   Validações de schemas
+-   CRUD completo para transações
 
-- Fluxo de cadastro e login de usuários
-- Criptrografia de senhas
-- Autenticação com JWT
-- Validações de schemas
-- CRUD completo para transações
-
----
-
-### :rocket: Rodando esse projeto localmente
+## :rocket: Rodando esse projeto localmente
 
 Para inicializar esse projeto é necessário que você possua a última versão estável do [Node.js](https://nodejs.org/en/download) e [npm](https://www.npmjs.com/) rodando localmente. Você também precisará instalar o [MongoDB](https://www.mongodb.com/docs/manual/installation/) para acessar o banco de dados, deixando aberto durante a execução.
 
@@ -89,11 +83,9 @@ Para iniciar o servidor, execute o comando:
 
 A aplicação estará disponível em: <http://localhost:5000> no seu navegador.
 
----
+## :world_map: Rotas
 
-### :world_map: Rotas
-
-Para acessar a documentação, implementada com swagger, acesse a rota: **/documentation**
+Para acessar a documentação, implementada com **swagger**, acesse a rota: [**/documentation**](http://localhost:5000/documentation)
 
 :warning: Todas as rotas **_/transactions_** são **_autenticadas_** e necessitam de um token de acesso
 
@@ -103,24 +95,18 @@ Para acessar a documentação, implementada com swagger, acesse a rota: **/docum
 
 ![routes](assets/routes.png)
 
----
+## :bulb: Reconhecimentos
 
-### :bulb: Reconhecimentos
+-   [Badges para Github](https://github.com/alexandresanlim/Badges4-README.md-Profile#-database-)
+-   [Inspiração de README](https://gist.github.com/luanalessa/7f98467a5ed62d00dcbde67d4556a1e4#file-readme-md)
+-   [Driven Education](https://www.driven.com.br)
 
-- [Badges para Github](https://github.com/alexandresanlim/Badges4-README.md-Profile#-database-)
-- [Inspiração de README](https://gist.github.com/luanalessa/7f98467a5ed62d00dcbde67d4556a1e4#file-readme-md)
-- [Driven Education](https://www.driven.com.br)
-
----
-
-### 👩‍🦱 Autora
+## 👩‍🦱 Autora
 
 Gabriela Tiago de Araújo
 
-- email: gabrielatiagodearaujo@outlook.com
-- linkedin: <https://www.linkedin.com/in/gabrielatiago/>
-- portfolio: <https://gabrielatiago.vercel.app>
-
----
+-   email: <gabrielatiagodearaujo@outlook.com>
+-   linkedin: <https://www.linkedin.com/in/gabrielatiago/>
+-   portfolio: <https://gabrielatiago.vercel.app>
 
 [🔝 Back to top](#mywallet)
