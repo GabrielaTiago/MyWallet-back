@@ -23,7 +23,7 @@ Esta é a parte backend do projeto, incluindo um fluxo de login seguro com cript
 
 A aplicação oferece rotas autenticadas para visualizar todas as transações registradas, permitindo que os usuários possam ter uma visão geral de suas finanças, assim como o saldo atual. Além disso, é possível registrar uma nova transação de gasto ou ganho, incluindo informações como data, valor e categoria.
 
-💸 [**API**](https://mywallet-api-backend.herokuapp.com)
+💸 [**API**](https://my-wallet-back-445fa7bffc2c.herokuapp.com)
 
 💰 [**Aplicação fullstack**](https://mywallet-gabrielatiago.vercel.app/)
 
