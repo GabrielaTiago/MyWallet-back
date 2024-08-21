@@ -14,7 +14,7 @@
             "description": "API de testes"
         },
         {
-            "url": "https://mywallet-api-backend.herokuapp.com",
+            "url": "https://my-wallet-back-445fa7bffc2c.herokuapp.com",
             "description": "API de produção"
         }
     ],
